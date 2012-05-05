@@ -1,10 +1,14 @@
 FactoryGirl.define do
   factory :user do
-    name     "Shamick Bindra"
-    email    "sbindra@example.com"
-    twittername "@bindrabindra"
-    facebookname "sbindra_fb"
+    sequence(:name) { |n| "Person #{n}" }
+    sequence(:email) { |n| "person_#{n}@example.com" }
+    sequence(:twittername) { |n| "@person_#{n}" }
+    sequence(:facebookname) { |n| "person_#{n}_fb" }
     password "foobar"
     password_confirmation "foobar"
+    
+    factory :admin do
+      admin true
+    end
   end
 end
