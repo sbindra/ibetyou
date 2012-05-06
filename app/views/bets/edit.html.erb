@@ -1,0 +1,23 @@
+<%= provide(:title, "The Bet") %>
+<h1>The Bet</h1>
+<div class="row">
+	<div class="span6 offset3">
+		<%= form_for(@bet) do |f| %>
+			Bet: <%= @bet.thebet %><br>
+			Created By: <%= @bet.user.name %><br>
+			<% if current_user == @bet.user %>
+				<br><br>
+				The Result:
+				<% if @bet.betresult.nil? %>
+					<%= f.submit "Yes", class: "btn btn-large btn-primary" %>
+					<%= f.submit "No", class: "btn btn-large btn-primary" %>
+				<% else %>
+					<%= @bet.betresult ? 'Yes' : 'No' %>
+				<% end %>
+			<% end %>
+		<% end %>
+		<% if current_user == @bet.user %>
+			OWNER
+		<% end %>
+	</div>
+</div>
