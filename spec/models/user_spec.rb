@@ -33,6 +33,7 @@ describe User do
   it { should respond_to(:remember_token) }
   it { should respond_to(:admin) }
   it { should respond_to(:authenticate) }
+  it { should respond_to(:bets)}
   
   it { should be_valid }
   it { should_not be_admin }
@@ -128,5 +129,28 @@ describe User do
   describe "remember token" do
     before { @user.save }
     its(:remember_token) { should_not be_blank }
+  end
+  
+  describe "bet associations" do
+    
+    before { @user.save }
+    let!(:older_bet) do
+      FactoryGirl.create(:bet, user: @user, created_at: 1.day.ago)
+    end
+    let!(:newer_bet) do
+      FactoryGirl.create(:bet, user: @user, created_at: 1.hour.ago)
+    end
+    
+    it "should have the right bets in the right order" do
+      @user.bets.should == [newer_bet, older_bet]
+    end
+    
+    it "should destroy associated bets" do
+      bets = @user.bets
+      @user.destroy
+      bets.each do |bet|
+        Bet.find_by_id(bet.id).should be_nil
+      end
+    end
   end
 end

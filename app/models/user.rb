@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
   attr_accessible :email, :facebookname, :name, :twittername,
                   :password, :password_confirmation
   has_secure_password
+  has_many :bets, dependent: :destroy
   
   before_save { |user| user.email = email.downcase }
   before_save :create_remember_token

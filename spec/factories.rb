@@ -11,4 +11,9 @@ FactoryGirl.define do
       admin true
     end
   end
+  
+  factory :bet do
+    thebet "Test Bet"
+    user
+  end
 end

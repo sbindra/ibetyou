@@ -1,9 +1,22 @@
-<div class="center hero-unit">
+<% if signed_in? %>
+  <div class="row">
+	<aside class="span4">
+		<section>
+			<%= render 'shared/user_info' %>
+		</section>
+		<section>
+			<%= render 'shared/bet_info' %>
+		</section>
+	</aside>
+  </div>
+<% else %>
+  <div class="center hero-unit">
 	<h1>Welcome to I Bet You</h1>
 	<h2>
 		This is the home page for I Bet You
 	</h2>
 	
 	<%= link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary" %>
-</div>
+  </div>
 
+<% end %>

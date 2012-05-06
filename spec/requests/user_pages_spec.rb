@@ -58,10 +58,21 @@ describe "User pages" do
   
   describe "profile page" do
     let(:user) { FactoryGirl.create(:user) }
+    let!(:b1) { FactoryGirl.create(:bet, user: user,
+                    thebet: "Will the A's beat the Rays tonight?") }
+    let!(:b2) { FactoryGirl.create(:bet, user: user,
+                    thebet: "Will Rick have more than 2 shots tonight?") }
+                    
     before { visit user_path(user) }
 
     it { should have_selector('h1', text: user.name) }
     it { should have_selector('title', text: user.name) }
+    
+    describe "bets" do
+      it { should have_content(b1.thebet) }
+      it { should have_content(b2.thebet) }
+      it { should have_content(user.bets.count) }
+    end
   end
   
   describe "signup" do

@@ -1,9 +1,21 @@
 <%= provide(:title, @user.name) %>
 <div class="row">
-	<h1><%= @user.name %></h1>
-	<h2><div align="left">
-		Email: <%= @user.email %><br>
+	<aside class="span4">
+		<section>
+		<h1><%= @user.name %></h1><br>
+		<h2Email: <%= @user.email %><br>
 		Twitter: <%= @user.twittername %><br>
 		Facebook: <%= @user.facebookname %><br>
-	</div></h2>
+		</h2>
+		</section>
+	</aside>
+	<div class="span8">
+		<% if @user.bets.any? %>
+			<h3>Bets (<%= @user.bets.count %>)</h3>
+			<ol class="bets">
+				<%= render @bets %>
+			</ol>
+			<%= will_paginate @bets %>
+		<% end %>
+	</div>
 </div>

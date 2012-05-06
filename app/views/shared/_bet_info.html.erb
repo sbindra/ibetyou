@@ -1,0 +1,7 @@
+<%= form_for(@bet) do |f| %>
+	<%= render 'shared/error_messages', object: f.object %>
+	<div class="field">
+		<%= f.text_area :thebet, placeholder: "Create new bet..." %>
+	</div>
+	<%= f.submit "Create Bet", class: "btn btn-large btn-primary" %>
+<% end %>
