@@ -10,6 +10,7 @@ describe Bet do
   it { should respond_to(:thebet) }
   it { should respond_to(:user_id) }
   it { should respond_to(:user) }
+  it { should respond_to(:betresult) }
   
   it { should be_valid }
   

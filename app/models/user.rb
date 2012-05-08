@@ -27,6 +27,14 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 6 }
   validates :password_confirmation, presence: true
   
+  def myownbets
+    Bet.where("user_id = ?", id)
+  end
+  
+  def myownopenbets
+    Bet.where("user_id = ? and betresult IS NULL", id)
+  end
+  
   private
     def create_remember_token
       self.remember_token = SecureRandom.urlsafe_base64

@@ -33,7 +33,9 @@ describe User do
   it { should respond_to(:remember_token) }
   it { should respond_to(:admin) }
   it { should respond_to(:authenticate) }
-  it { should respond_to(:bets)}
+  it { should respond_to(:bets) }
+  it { should respond_to(:myownbets) }
+  it { should respond_to(:myownopenbets) }
   
   it { should be_valid }
   it { should_not be_admin }
@@ -151,6 +153,26 @@ describe User do
       bets.each do |bet|
         Bet.find_by_id(bet.id).should be_nil
       end
+    end
+    
+    describe "all my own bets" do
+      let(:otherowner_bet) do
+        FactoryGirl.create(:bet, user: FactoryGirl.create(:user))
+      end
+      
+      its(:myownbets) { should include(newer_bet) }
+      its(:myownbets) { should include(older_bet) }
+      its(:myownbets) { should_not include(otherowner_bet) }
+    end
+    
+    describe "my own open bets" do
+      let!(:closed_bet) do
+        FactoryGirl.create(:bet, user: @user, betresult: true, created_at: 1.hour.ago)
+      end
+      
+      its(:myownopenbets) { should include(newer_bet) }
+      its(:myownopenbets) { should include(older_bet) }
+      its(:myownopenbets) { should_not include(closed_bet) }
     end
   end
 end
