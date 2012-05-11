@@ -11,6 +11,7 @@ describe Bet do
   it { should respond_to(:user_id) }
   it { should respond_to(:user) }
   it { should respond_to(:betresult) }
+  it { should respond_to(:picks) }
   
   it { should be_valid }
   
@@ -25,11 +26,6 @@ describe Bet do
         Bet.new(user_id: user.id)
       end.should raise_error(ActiveModel::MassAssignmentSecurity::Error)
     end
-  end
-  
-  describe "when user_id is not presenet" do
-    before { @bet.user_id = nil }
-    it { should_not be_valid }
   end
   
   describe "with blank content" do

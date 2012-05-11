@@ -16,4 +16,10 @@ FactoryGirl.define do
     thebet "Test Bet"
     user
   end
+
+  factory :pick do
+    pick true
+    bet
+    user
+  end
 end

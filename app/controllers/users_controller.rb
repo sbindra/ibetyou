@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   
   def show
     @user = User.find(params[:id])
-    @bets = @user.bets.paginate(page: params[:page])
+    @myownbets = @user.myownbets.paginate(page: params[:page])
   end
   
   def new

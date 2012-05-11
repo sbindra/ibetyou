@@ -1,7 +1,7 @@
 <li>
 	<span class="content"><%= link_to bet.thebet, edit_bet_path(bet) %></span>
 	<span class="timestamp">
-		Posted <%= time_ago_in_words(bet.created_at) %> ago.
+		Posted <%= time_ago_in_words(bet.created_at) %> ago by <%= bet.user.name %>.
 	</span>
 	
 </li>

@@ -36,6 +36,7 @@ describe User do
   it { should respond_to(:bets) }
   it { should respond_to(:myownbets) }
   it { should respond_to(:myownopenbets) }
+  it { should respond_to(:picks) }
   
   it { should be_valid }
   it { should_not be_admin }

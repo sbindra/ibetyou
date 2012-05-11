@@ -7,7 +7,7 @@ class BetsController < ApplicationController
     @bet = current_user.bets.build(params[:bet])
     if @bet.save
       flash[:success] = "Bet created!"
-      redirect_to @bet
+      redirect_to edit_bet_path(@bet)
     else
       render 'content_pages/home'
     end

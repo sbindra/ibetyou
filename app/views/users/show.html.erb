@@ -10,12 +10,19 @@
 		</section>
 	</aside>
 	<div class="span8">
-		<% if @user.bets.any? %>
-			<h3>Bets (<%= @user.bets.count %>)</h3>
+		<% if @user.myownbets.any? %>
+			<h3>My Bets (<%= @user.myownbets.count %>)</h3>
 			<ol class="bets">
-				<%= render @bets %>
+				<% @myownbets.each do |bet| %>
+				<li>
+					<span class="content"><%= link_to bet.thebet, edit_bet_path(bet) %></span>
+					<span class="timestamp">
+						Posted <%= time_ago_in_words(bet.created_at) %> ago by <%= User.find(bet.user_id).name %>.
+					</span>
+				</li>
+				<% end %>
 			</ol>
-			<%= will_paginate @bets %>
+			<%= will_paginate @myownbets %>
 		<% end %>
 	</div>
 </div>
