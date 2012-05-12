@@ -10,8 +10,9 @@ describe Pick do
   it { should respond_to(:pick) }
   it { should respond_to(:user_id) }
   it { should respond_to(:bet_id) }
-  it { should respond_to(:user)}
-  it { should respond_to(:bet)}
+  it { should respond_to(:user) }
+  it { should respond_to(:bet) }
+  it { should respond_to(:correct?) }
   its(:user) { should == user }
   its(:bet) { should == bet }
   

@@ -211,3 +211,17 @@ aside {
 		margin-bottom: 5px;
 	}
 }
+
+
+/* picks */
+.picks {
+	list-style: none;
+	margin: 0 0 0 0;
+	
+	li.correct {
+		font-weight: bold;
+	}
+	li.incorrect {
+	}
+	
+}

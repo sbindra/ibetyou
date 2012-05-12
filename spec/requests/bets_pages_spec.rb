@@ -108,6 +108,17 @@ describe "Bets Pages" do
       it { should have_content('Yes' || 'No')  }
     end
     
-   
+    describe "when you have already picked someone else's bet" do
+      let(:other_user) { FactoryGirl.create(:user, email: "other@example.com") }
+      let!(:other_bet) { FactoryGirl.create(:bet, user: other_user, betresult: true) }
+      let!(:pick) { FactoryGirl.create(:pick, user: user, bet: other_bet) }
+    
+      before { visit edit_bet_path(other_bet) }
+      
+      describe "and the bet is closed" do
+        it { should have_content(user.name) }
+      end
+    end
+    
   end
 end
