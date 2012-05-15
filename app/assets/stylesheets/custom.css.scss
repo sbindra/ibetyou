@@ -47,7 +47,7 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
 	font-size: 3em;
 	letter-spacing: -2px;
-	margin-bottom: 30px;
+	margin-bottom: 18px;
 	text-align: center;
 }
 
@@ -156,10 +156,10 @@ aside {
 
 input, textarea, select, .uneditable-input {
 	border: 1px solid #bbb;
-	width: 100%;
+	width: 90%;
 	padding: 10px;
-	height: 300px;
-	font-size: 20px;
+	height: 50%;
+	font-size: 15px;
 	margin-bottom: 15px;
 	@include box_sizing;
 }
