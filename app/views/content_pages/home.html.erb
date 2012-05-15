@@ -1,9 +1,7 @@
 <% if signed_in? %>
-  <div class="row">
-	<aside class="span4"><section>
-	<%= render 'shared/user_info' %>
+  <div class="hero-unit">
+	<h1>Make a bet!</h1>
 	<%= render 'shared/bet_info' %>
-	</section></aside>
   </div>
 <% else %>
   <div class="center hero-unit">
