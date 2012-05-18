@@ -1,0 +1,22 @@
+<% if @bet.betresult.nil? %>
+	<% if current_user == @bet.user %>	
+		What actually happened?<br>
+		<%= form_for(@bet) do |f| %>			
+			<%= f.submit "Yes", class: "btn btn-large btn-primary" %>
+			<%= f.submit "No", class: "btn btn-large btn-primary" %>
+		<% end %>
+	<% end %>
+<% else %>
+	The Result: <%= @bet.betresult ? 'Yes' : 'No' %>
+	<br><br>
+	<% if @bet.picks.count > 0 %>
+		Users made picks: <br>
+		<ul class="picks">
+			<% @bet.picks.each do |pick| %>
+				<li class="<%= pick.correct?(@bet) ? 'correct' : 'incorrect' %>">
+					<%= pick.user.name %> said <%= pick.pick ? 'Yes' : 'No' %>
+				</li>
+			<% end %>
+		</ul>
+	<% end %>
+<% end %>

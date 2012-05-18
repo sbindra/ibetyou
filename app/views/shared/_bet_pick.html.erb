@@ -1,0 +1,14 @@
+<% if !@bet.userpick(current_user).nil? %>
+	<%= current_user.name %> said: <%= @bet.userpick(current_user).pick ? 'Yes' : 'No' %>
+<% else %>
+	<% if @bet.betresult.nil? %>
+		What do you think?<br>
+		<%= form_for(@bet, :url => picks_path, :html => {:method => :post}) do |f| %>			
+			<%= hidden_field_tag 'bet_id', @bet.id %>
+			<%= f.submit "PickY", class: "btn btn-large btn-primary" %>
+			<%= f.submit "PickN", class: "btn btn-large btn-primary" %>
+		<% end %>
+	<% else %>
+		You didn't make a pick.
+	<% end %>
+<% end %>

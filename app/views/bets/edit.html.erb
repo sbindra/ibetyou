@@ -3,45 +3,52 @@
 <div class="row">
 	<div class="span6 offset3">
 		Bet: <%= @bet.thebet %><br>
-		Created By: <%= @bet.user.name %><br>
-		<br><br>
-		Your Pick:
-		<% if !@bet.userpick(current_user).nil? %>
-			<%= @bet.userpick(current_user).pick ? 'Yes' : 'No' %>
-		<% else %>
-			<% if @bet.betresult.nil? %>
-				<%= form_for(@bet, :url => picks_path, :html => {:method => :post}) do |f| %>			
-					<%= hidden_field_tag 'bet_id', @bet.id %>
-					<%= f.submit "PickY", class: "btn btn-large btn-primary" %>
-					<%= f.submit "PickN", class: "btn btn-large btn-primary" %>
-				<% end %>
+		Created By: <%= @bet.user.name %>
+		<br><br><br>
+		
+		<!-- if user is not bet owner -->
+		<% if current_user != @bet.user %>
+			<%= render 'shared/bet_pick' %>
+			<!-- if user has not sent to friends -->
+			<!-- ****FIX THIS IF**** -->
+			<% if 1 == 1 %>
+				<%= render 'shared/bet_share' %>
+				<%= render 'shared/bet_new' %>
 			<% else %>
-				You didn't make a pick.
-			<% end %>
-		<% end %>
-		<br><br>
-		The Result:
-		<% if @bet.betresult.nil? %>
-			<% if current_user == @bet.user %>	
-				<%= form_for(@bet) do |f| %>			
-					<%= f.submit "Yes", class: "btn btn-large btn-primary" %>
-					<%= f.submit "No", class: "btn btn-large btn-primary" %>
-				<% end %>
+				<!-- else user HAS sent to friends -->
+				<%= render 'shared/bet_new' %>
+				<%= render 'shared/bet_share' %>
 			<% end %>
 		<% else %>
-			<%= @bet.betresult ? 'Yes' : 'No' %>
-			<br><br>
-			<% if @bet.picks.count > 0 %>
-				Users made picks: <br>
-				<ul class="picks">
-					<% @bet.picks.each do |pick| %>
-						<li class="<%= pick.correct?(@bet) ? 'correct' : 'incorrect' %>">
-							<%= pick.user.name %> said <%= pick.pick ? 'Yes' : 'No' %>
-						</li>
-					<% end %>
-				</ul>
+			<!-- else user is bet owner -->
+			
+			<!-- if user has not sent to friends 
+				 AND
+				 has not made a pick -->
+			<!-- ****FIX THIS IF**** -->
+			<% if 1 == 1 %>
+				<%= render 'shared/bet_share' %>
+				<%= render 'shared/bet_pick' %>
+				<%= render 'shared/bet_result' %>
+			<!-- ****FIX THIS ELSE IF**** -->
+			<% elsif 1 == 2 %>
+				<!-- user HAS sent to friends 
+					AND
+					has made a pick -->
+				<%= render 'shared/bet_pick' %>
+				<%= render 'shared/bet_result' %>
+				<%= render 'shared/bet_share' %>
+			<% else %>
+				<!-- user has sent to friends but no pick
+					OR
+					user has not sent to friends but did pick -->
+				<%= render 'shared/bet_pick' %>
+				<%= render 'shared/bet_share' %>
+				<%= render 'shared/bet_result' %>
 			<% end %>
+			
+			<!-- create another bet is always last for bet owner -->
+			<%= render 'shared/bet_new' %>
 		<% end %>
-
 	</div>
 </div>
