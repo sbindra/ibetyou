@@ -13,11 +13,11 @@ describe "Bets Pages" do
     describe "with invalid information" do
       
       it "should not create a bet" do
-        expect { click_button "Create Bet" }.should_not change(Bet, :count)
+        expect { click_button "Create your bet!" }.should_not change(Bet, :count)
       end
       
       describe "error messages" do
-        before { click_button "Create Bet" }
+        before { click_button "Create your bet!" }
         it { should have_content('error') }
       end
     end
@@ -26,7 +26,7 @@ describe "Bets Pages" do
       
       before { fill_in 'bet_thebet', with: "Lorem ipsum" }
       it "should create a bet" do
-        expect { click_button "Create Bet" }.should change(Bet, :count).by(1)
+        expect { click_button "Create your bet!" }.should change(Bet, :count).by(1)
       end
     end
   end
@@ -121,4 +121,32 @@ describe "Bets Pages" do
     end
     
   end
+  
+  describe "bet sharing" do
+    
+    describe "when you are not the bet owner" do
+      
+      let(:other_user) { FactoryGirl.create(:user, email: "other@example.com") }
+      let(:bet) { FactoryGirl.create(:bet, user: other_user) }
+
+      before { visit edit_bet_path(bet) }
+      
+      describe "should have the share button" do
+          it { should have_button('Share') }
+      end
+      
+      describe "when you have picked" do
+      end
+      
+      describe "when you have not picked" do
+        
+      end
+    end
+    
+    describe "when you are the bet owner" do
+      
+    end
+  
+  end
+  
 end

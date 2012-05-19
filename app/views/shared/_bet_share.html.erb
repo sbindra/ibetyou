@@ -1,7 +1,6 @@
 <% if @bet.betresult.nil? %>
 	<br>
 	<!-- Change language if they've sent to friends already -->
-	<!-- ****FIX THIS IF****-->
 	<% if (current_user == @bet.user && @bet.betshared?) ||
 		  (current_user != @bet.user && !@bet.userpick(current_user).nil? && 
 				@bet.userpick(current_user).betshared?) %>
@@ -10,6 +9,10 @@
 		Find out what your friends think?
 	<% end %>
 	<br>
+	<%= form_for(@bet, :url => picks_path, :html => {:method => :post}) do |f| %>			
+		<%= hidden_field_tag 'bet_id', @bet.id %>
+		<%= f.submit "Share", class: "btn btn-large btn-primary" %>
+	<% end %>
 	Copy this link: <%= request.url %>
 <% end %>
 <br>
