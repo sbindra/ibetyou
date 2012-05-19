@@ -1,5 +1,5 @@
 class Pick < ActiveRecord::Base
-  attr_accessible :user_id, :pick
+  attr_accessible :user_id, :pick, :betshared
   belongs_to :user
   belongs_to :bet
   

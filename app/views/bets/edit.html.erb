@@ -9,13 +9,16 @@
 		<!-- if user is not bet owner -->
 		<% if current_user != @bet.user %>
 			<%= render 'shared/bet_pick' %>
-			<!-- if user has not sent to friends -->
+			<!-- if user has not made a pick
+			 	OR
+				user has made a pick and not sent to friends -->
 			<!-- ****FIX THIS IF**** -->
-			<% if 1 == 1 %>
+			<% if @bet.userpick(current_user).nil? || 
+					(!@bet.userpick(current_user).nil? && !@bet.userpick(current_user).betshared?) %>
 				<%= render 'shared/bet_share' %>
 				<%= render 'shared/bet_new' %>
 			<% else %>
-				<!-- else user HAS sent to friends -->
+				<!-- else user HAS made a pick -->
 				<%= render 'shared/bet_new' %>
 				<%= render 'shared/bet_share' %>
 			<% end %>
@@ -25,13 +28,11 @@
 			<!-- if user has not sent to friends 
 				 AND
 				 has not made a pick -->
-			<!-- ****FIX THIS IF**** -->
-			<% if 1 == 1 %>
+			<% if !@bet.betshared? && @bet.userpick(current_user).nil? %>
 				<%= render 'shared/bet_share' %>
 				<%= render 'shared/bet_pick' %>
 				<%= render 'shared/bet_result' %>
-			<!-- ****FIX THIS ELSE IF**** -->
-			<% elsif 1 == 2 %>
+			<% elsif @bet.betshared? && !@bet.userpick(current_user).nil? %>
 				<!-- user HAS sent to friends 
 					AND
 					has made a pick -->

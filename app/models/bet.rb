@@ -1,5 +1,5 @@
 class Bet < ActiveRecord::Base
-  attr_accessible :betresult, :thebet
+  attr_accessible :betresult, :thebet, :betshared
   belongs_to :user
   has_many :picks, dependent: :destroy
   

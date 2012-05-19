@@ -12,6 +12,7 @@ describe Pick do
   it { should respond_to(:bet_id) }
   it { should respond_to(:user) }
   it { should respond_to(:bet) }
+  it { should respond_to(:betshared) }
   it { should respond_to(:correct?) }
   its(:user) { should == user }
   its(:bet) { should == bet }
@@ -26,6 +27,12 @@ describe Pick do
   describe "when bet_id is not present" do
     before { @pick.bet_id = nil }
     it { should_not be_valid }
+  end
+  
+  describe "with betshared set to 'true'" do
+    before { @pick.toggle!(:betshared) }
+    
+    it { should be_betshared }
   end
   
 end

@@ -11,14 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120508035203) do
+ActiveRecord::Schema.define(:version => 20120519015927) do
 
   create_table "bets", :force => true do |t|
     t.string   "thebet"
     t.integer  "user_id"
     t.boolean  "betresult"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.boolean  "betshared",  :default => false
   end
 
   add_index "bets", ["user_id"], :name => "index_bets_on_user_id"
@@ -38,8 +39,9 @@ ActiveRecord::Schema.define(:version => 20120508035203) do
     t.boolean  "pick"
     t.integer  "user_id"
     t.integer  "bet_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.boolean  "betshared",  :default => false
   end
 
   add_index "picks", ["bet_id"], :name => "index_picks_on_bet_id"

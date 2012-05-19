@@ -12,6 +12,7 @@ describe Bet do
   it { should respond_to(:user) }
   it { should respond_to(:betresult) }
   it { should respond_to(:picks) }
+  it { should respond_to(:betshared) }
   
   it { should be_valid }
   
@@ -38,4 +39,9 @@ describe Bet do
     it { should_not be_valid }
   end
   
+  describe "with betshared set to 'true'" do
+    before { @bet.toggle!(:betshared) }
+    
+    it { should be_betshared }
+  end
 end
