@@ -5,51 +5,54 @@
 		Bet: <%= @bet.thebet %><br>
 		Created By: <%= @bet.user.name %>
 		<br><br><br>
-		
-		<!-- if user is not bet owner -->
-		<% if current_user != @bet.user %>
-			<%= render 'shared/bet_pick' %>
-			<!-- if user has not made a pick
-			 	OR
-				user has made a pick and not sent to friends -->
-			<!-- ****FIX THIS IF**** -->
-			<% if @bet.userpick(current_user).nil? || 
-					(!@bet.userpick(current_user).nil? && !@bet.userpick(current_user).betshared?) %>
-				<%= render 'shared/bet_share' %>
-				<%= render 'shared/bet_new' %>
-			<% else %>
-				<!-- else user HAS made a pick -->
-				<%= render 'shared/bet_new' %>
-				<%= render 'shared/bet_share' %>
-			<% end %>
-		<% else %>
-			<!-- else user is bet owner -->
-			
-			<!-- if user has not sent to friends 
-				 AND
-				 has not made a pick -->
-			<% if !@bet.betshared? && @bet.userpick(current_user).nil? %>
-				<%= render 'shared/bet_share' %>
-				<%= render 'shared/bet_pick' %>
-				<%= render 'shared/bet_result' %>
-			<% elsif @bet.betshared? && !@bet.userpick(current_user).nil? %>
-				<!-- user HAS sent to friends 
-					AND
-					has made a pick -->
-				<%= render 'shared/bet_pick' %>
-				<%= render 'shared/bet_result' %>
-				<%= render 'shared/bet_share' %>
-			<% else %>
-				<!-- user has sent to friends but no pick
-					OR
-					user has not sent to friends but did pick -->
-				<%= render 'shared/bet_pick' %>
-				<%= render 'shared/bet_share' %>
-				<%= render 'shared/bet_result' %>
-			<% end %>
-			
-			<!-- create another bet is always last for bet owner -->
+		<% if !@bet.betresult.nil? %>
+			<%= render 'shared/bet_finalresults' %>
 			<%= render 'shared/bet_new' %>
+		<% else %>
+			<!-- if user is not bet owner -->
+			<% if current_user != @bet.user %>
+				<%= render 'shared/bet_pick' %>
+				<!-- if user has not made a pick
+			 		OR
+					user has made a pick and not sent to friends -->
+				<% if @bet.userpick(current_user).nil? || 
+						(!@bet.userpick(current_user).nil? && !@bet.userpick(current_user).betshared?) %>
+					<%= render 'shared/bet_share' %>
+					<%= render 'shared/bet_new' %>
+				<% else %>
+					<!-- else user HAS made a pick -->
+					<%= render 'shared/bet_new' %>
+					<%= render 'shared/bet_share' %>
+				<% end %>
+			<% else %>
+				<!-- else user is bet owner -->
+			
+				<!-- if user has not sent to friends 
+				 	AND
+				 	has not made a pick -->
+				<% if !@bet.betshared? && @bet.userpick(current_user).nil? %>
+					<%= render 'shared/bet_share' %>
+					<%= render 'shared/bet_pick' %>
+					<%= render 'shared/bet_result' %>
+				<% elsif @bet.betshared? && !@bet.userpick(current_user).nil? %>
+					<!-- user HAS sent to friends 
+						AND
+						has made a pick -->
+					<%= render 'shared/bet_pick' %>
+					<%= render 'shared/bet_result' %>
+					<%= render 'shared/bet_share' %>
+				<% else %>
+					<!-- user has sent to friends but no pick
+						OR
+						user has not sent to friends but did pick -->
+					<%= render 'shared/bet_pick' %>
+					<%= render 'shared/bet_share' %>
+					<%= render 'shared/bet_result' %>
+				<% end %>
+			
+				<!-- create another bet is always last for bet owner -->
+				<%= render 'shared/bet_new' %>
+			<% end %>
 		<% end %>
 	</div>
 </div>

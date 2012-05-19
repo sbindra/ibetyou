@@ -1,7 +1,7 @@
 Ibetyou::Application.routes.draw do
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
-  resources :bets, only: [:create, :destroy, :edit, :update]
+  resources :bets
   resources :picks, only: [:create]
   
   root to: 'content_pages#home'

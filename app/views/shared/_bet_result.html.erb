@@ -7,16 +7,5 @@
 		<% end %>
 	<% end %>
 <% else %>
-	The Result: <%= @bet.betresult ? 'Yes' : 'No' %>
-	<br><br>
-	<% if @bet.picks.count > 0 %>
-		Users made picks: <br>
-		<ul class="picks">
-			<% @bet.picks.each do |pick| %>
-				<li class="<%= pick.correct?(@bet) ? 'correct' : 'incorrect' %>">
-					<%= pick.user.name %> said <%= pick.pick ? 'Yes' : 'No' %>
-				</li>
-			<% end %>
-		</ul>
-	<% end %>
+	<%= render 'shared/bet_finalresults' %>	
 <% end %>

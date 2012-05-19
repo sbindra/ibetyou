@@ -33,7 +33,7 @@ class BetsController < ApplicationController
       @bet.update_attributes(:betresult => false)
       flash[:success] = "Results = No!"
     end
-    redirect_to edit_bet_path(@bet)
+    redirect_to bet_path(@bet)
   end
   
   private

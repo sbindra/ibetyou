@@ -1,0 +1,13 @@
+The Result: <%= @bet.betresult ? 'Yes' : 'No' %>
+<br><br>
+<% if @bet.picks.count > 0 %>
+	Users made picks: <br>
+	<ul class="picks">
+		<% @bet.picks.each do |pick| %>
+			<li class="<%= pick.correct?(@bet) ? 'correct' : 'incorrect' %>
+						<%= current_user == pick.user ? 'userspick' : '' %>">
+				<%= pick.user.name %> said <%= pick.pick ? 'Yes' : 'No' %>
+			</li>
+		<% end %>
+	</ul>
+<% end %>

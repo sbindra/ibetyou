@@ -15,7 +15,7 @@
 			<ol class="bets">
 				<% @myownbets.each do |bet| %>
 				<li>
-					<span class="content"><%= link_to bet.thebet, edit_bet_path(bet) %></span>
+					<span class="content"><%= link_to bet.thebet, bet.betresult.nil? ? edit_bet_path(bet) : bet_path(bet) %></span>
 					<span class="timestamp">
 						Posted <%= time_ago_in_words(bet.created_at) %> ago by <%= User.find(bet.user_id).name %>.
 					</span>
