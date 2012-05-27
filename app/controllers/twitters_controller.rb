@@ -68,6 +68,7 @@ class TwittersController < ApplicationController
   # start a request and send to twitter
   def create
     request_token = @client.request_token(:oauth_callback => 'http://127.0.0.1:3000/twitter/new')
+    request_token = @client.request_token(:oauth_callback => 'https://gentle-snow-7462.herokuapp.com/twitter/new')
 
     session['oauth_request_token_token'] = request_token.token
     session['oauth_request_token_secret'] = request_token.secret
