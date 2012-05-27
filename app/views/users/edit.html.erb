@@ -15,6 +15,14 @@
 		
 		<%= f.label :twittername, "Twitter" %>
 		<%= f.text_field :twittername %>
+		<br>
+		<% if current_user.twitter? %>
+		  Twitter authorized! -
+		  <%= link_to 'click here to deauthorize Twitter', twitter_path, :method => :delete %>
+		<% else %>
+		  <%= link_to 'Authorize Twitter', twitter_path, :method => :post %>
+		<% end %>
+		<br>
 		
 		<%= f.label :facebookname, "Facebook" %>
 		<%= f.text_field :facebookname %>

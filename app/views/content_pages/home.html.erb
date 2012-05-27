@@ -1,5 +1,13 @@
 <% if signed_in? %>
   <div class="row">
+	<h1>Twitter</h1>
+	<% if current_user.twitter? %>
+	  Twitter authorized! -
+	  <%= link_to 'click here to deauthorize Twitter', twitter_path, :method => :delete %>
+	<% else %>
+	  <%= link_to 'Authorize Twitter', twitter_path, :method => :post %>
+	<% end %>
+	
 	<h1>Make a bet!</h1>
 	<%= render 'shared/bet_info' %>
   </div>

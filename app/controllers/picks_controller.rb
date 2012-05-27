@@ -3,7 +3,17 @@ class PicksController < ApplicationController
   
   def create
     @bet = Bet.find(params[:bet_id])
-    if params[:commit] == "Share"
+    if params[:commit] == "Share on Twitter"
+      
+      @bet_url = request.protocol + request.host_with_port + edit_bet_path(@bet)
+      #@bet_url = 'https://gentle-snow-7462.herokuapp.com/' + edit_bet_path(@bet)
+      if @bet.thebet.length >= 119
+        @bet_twitter_post = @bet.thebet[0..115]+'... '
+      else
+        @bet_twitter_post = @bet.thebet+' '
+      end
+      
+      current_user.twitter.update(@bet_twitter_post+@bet_url, {:include_entities => true}) if current_user.twitter?
       
       if current_user == @bet.user
         if !@bet.betshared?
@@ -26,7 +36,7 @@ class PicksController < ApplicationController
         @pick = @bet.picks.build(pick: true, user_id: current_user.id)
         @pick.save
         flash[:success] = "You picked Yes!"
-      else
+      elsif params[:commit] == 'PickN'
         @pick = @bet.picks.build(pick: false, user_id: current_user.id)
         @pick.save
         flash[:success] = "You picked No!"

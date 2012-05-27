@@ -4,6 +4,8 @@ Ibetyou::Application.routes.draw do
   resources :bets
   resources :picks, only: [:create]
   
+  resource :twitter
+  
   root to: 'content_pages#home'
   
   match '/users',   to: 'users#show'

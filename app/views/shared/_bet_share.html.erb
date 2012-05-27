@@ -11,8 +11,14 @@
 	<br>
 	<%= form_for(@bet, :url => picks_path, :html => {:method => :post}) do |f| %>			
 		<%= hidden_field_tag 'bet_id', @bet.id %>
-		<%= f.submit "Share", class: "btn btn-large btn-primary" %>
+		<%= f.submit "Share on Twitter", class: "btn btn-large btn-primary" %>
 	<% end %>
 	Copy this link: <%= request.url %>
+	<br>
+	<% if current_user.twitter? %>
+	  <%= link_to 'Post Bet to Twitter', twitter_path, :method => :createpost %>
+	<% else %>
+	  <%= link_to 'Authorize Twitter', twitter_path, :method => :post %>
+	<% end %>
 <% end %>
 <br>
