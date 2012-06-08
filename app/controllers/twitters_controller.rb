@@ -58,8 +58,8 @@ class TwittersController < ApplicationController
       session['oauth_request_token_token'] = nil
       session['oauth_request_token_secret'] = nil
       flash[:notice] = 'Your account has been authorized at Twitter'
-    #rescue
-     # flash[:error] = 'There was an error during processing the response from Twitter.'
+    rescue
+      flash[:error] = 'There was an error during processing the response from Twitter.'
     end
 
     redirect_back_or edit_user_path(current_user)

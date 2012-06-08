@@ -13,7 +13,7 @@
 
 class User < ActiveRecord::Base
   attr_accessible :email, :facebookname, :name, :twittername,
-                  :password, :password_confirmation, :twitter_token, :twitter_secret
+                  :password, :password_confirmation, :facebook_token, :twitter_token, :twitter_secret
   has_secure_password
   has_many :bets, dependent: :destroy
   has_many :picks, dependent: :destroy
@@ -52,6 +52,10 @@ class User < ActiveRecord::Base
   def twitter?
     self.twitter_token && self.twitter_secret
   end
+  
+  def facebook?
+    self.facebook_token
+  end
     
   attr_accessor :twitter_client
   
@@ -67,6 +71,19 @@ class User < ActiveRecord::Base
     else
       false
     end
+  end
+  
+  def facebook
+    if facebook?
+      return FbGraph::User.me(self.facebook_token)
+    else
+      false
+    end
+  end
+  
+  def clearfacebook
+    self.facebook_token = nil
+    self.save!
   end
   
   private

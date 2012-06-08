@@ -3,7 +3,24 @@ class PicksController < ApplicationController
   
   def create
     @bet = Bet.find(params[:bet_id])
-    if params[:commit] == "Share on Twitter"
+    
+    if params[:commit] == "Share on Facebook"
+      @bet_url = request.protocol + request.host_with_port + edit_bet_path(@bet)
+      #@bet_url = 'https://gentle-snow-7462.herokuapp.com/' + edit_bet_path(@bet)
+      
+      begin
+        current_user.facebook.feed!(
+          :message => @bet.thebet,
+          :link => @bet_url,
+          :name => 'iBetYou',
+          :description => 'What do you think?'
+          )
+        flash[:success] = "Bet shared on Facebook"
+      rescue
+          current_user.clearfacebook
+          flash[:error] = "Reauthorize Facebook"
+      end
+    elsif params[:commit] == "Share on Twitter"
       
       @bet_url = request.protocol + request.host_with_port + edit_bet_path(@bet)
       #@bet_url = 'https://gentle-snow-7462.herokuapp.com/' + edit_bet_path(@bet)
@@ -26,7 +43,7 @@ class PicksController < ApplicationController
 
         if !@pick.nil?
           @pick.update_attributes(:betshared => true)
-          flash[:success] = "Bet shared with friends"
+          flash[:success] = "Bet shared with friends (owner)"
         else
           flash[:success] = "Bet shared with friends (but no pick yet)"
         end

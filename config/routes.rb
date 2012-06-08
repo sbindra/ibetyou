@@ -5,6 +5,7 @@ Ibetyou::Application.routes.draw do
   resources :picks, only: [:create]
   
   resource :twitter
+  resource :facebook
   
   root to: 'content_pages#home'
   

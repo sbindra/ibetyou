@@ -1,5 +1,12 @@
 <% if signed_in? %>
   <div class="row">
+	<% if current_user.facebook? %>
+	  Facebook authorized! -
+	  <%= link_to 'click here to deauthorize Facebook', facebook_path, :method => :delete %>
+	<% else %>
+	  <%= link_to 'Authorize Facebook', facebook_path, :method => :post %>
+	<% end %>
+	<br>
 	<h1>Twitter</h1>
 	<% if current_user.twitter? %>
 	  Twitter authorized! -

@@ -26,7 +26,14 @@
 		
 		<%= f.label :facebookname, "Facebook" %>
 		<%= f.text_field :facebookname %>
-		
+		<br>
+		<% if current_user.facebook? %>
+		  Facebook authorized! -
+		  <%= link_to 'click here to deauthorize Facebook', facebook_path, :method => :delete %>
+		<% else %>
+		  <%= link_to 'Authorize Facebook', facebook_path, :method => :post %>
+		<% end %>
+		<br>
 		<%= f.label :password %>
 		<%= f.password_field :password %>
 			
