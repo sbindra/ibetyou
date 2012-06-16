@@ -14,7 +14,7 @@
 class User < ActiveRecord::Base
   attr_accessible :email, :facebookname, :name, :twittername,
                   :facebook_token, :facebook_id,
-                  :twitter_token, :twitter_secret,
+                  :twitter_token, :twitter_secret, :twitter_id,
                   :password, :password_confirmation
                   
   #has_secure_password
@@ -29,15 +29,17 @@ class User < ActiveRecord::Base
   has_many :bets, dependent: :destroy
   has_many :picks, dependent: :destroy
   
-  before_save { |user| user.email = email.downcase }
-  before_save :create_remember_token
+  before_save { |user| if !user.email.nil? then user.email = email.downcase end }
+  before_save :create_remember_token, :on => :create
   #, :if=>:password_changed?
   
   validates :name, presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email, presence: true, format: { with: VALID_EMAIL_REGEX },
-            uniqueness: { case_sensitive: false }
+  validates :email, format: { with: VALID_EMAIL_REGEX },
+            uniqueness: { case_sensitive: false }, :allow_blank => true
+  validates_presence_of :email, :if=>:password_changed?
   validates :facebook_id, :uniqueness => true
+  validates :twitter_id, :uniqueness => true
   #validates :password, length: { minimum: 6 }, :if=>:password_changed?
   #validates_confirmation_of :password, :if=>:password_changed?
   #validates :password_confirmation, presence: true

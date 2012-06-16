@@ -10,13 +10,16 @@ class TwittersController < ApplicationController
     begin
       current_user.twitter_token = nil
       current_user.twitter_secret = nil
+      current_user.twittername = nil
+      current_user.twitter_id = nil
       raise 'Could not save user' if !current_user.save
       flash[:notice] = 'Your have revoked your Twitter account authorization'
     rescue
       flash[:error] = 'Could not revoke your Twitter account authorization'
     end
 
-    redirect_back_or edit_user_path(current_user)
+    sign_in current_user
+    redirect_to edit_user_path(current_user)
   end  
 
   # authorize oauth client and save access keys
@@ -25,7 +28,11 @@ class TwittersController < ApplicationController
     begin
       if params[:oauth_token] != session['oauth_request_token_token']
         flash[:error] = 'Could not authorize your Twitter account'
-        return redirect_back_or edit_user_path(current_user)
+        if current_user.nil?
+          return redirect_to signup_path
+        else
+          return redirect_to edit_user_path(current_user)
+        end
       end
       
       oauth_token = session['oauth_request_token_token']
@@ -41,28 +48,59 @@ class TwittersController < ApplicationController
         
         client_info = @client.info
         
-        # current_user.update_attributes(:twitter_token => access_token.token, :twitter_secret => access_token.secret)
-        
-        current_user.twitter_token = access_token.token
-        current_user.twitter_secret = access_token.secret
-        #current_user.delete(:password) if current_user.password.blank?
-        #current_user.update_attributes!(:facebookname => "updatedfb2")
-        
-        #@client.update('test tweet 2')
-        #return render :text => "The object is #{access_token.token}, #{oauth_token}, #{@client.authorized?}"
-        
-        #raise 'Could not save user' if current_user.twitter_token.nil?
-        raise 'Could not save user' if !current_user.save
-      end
-      
-      session['oauth_request_token_token'] = nil
-      session['oauth_request_token_secret'] = nil
-      flash[:notice] = 'Your account has been authorized at Twitter'
-    rescue
-      flash[:error] = 'There was an error during processing the response from Twitter.'
-    end
+        if current_user.nil?
+          newname = client_info['name']
+          newtwittername = client_info['screen_name']
+          newuserid = client_info['id_str']
 
-    redirect_back_or edit_user_path(current_user)
+          @user = User.find_by_twitter_id(newuserid)
+            
+          if @user.nil?
+            @user = User.new(:name => newname, :twittername => newtwittername,
+                      :twitter_id => newuserid, :twitter_token => access_token.token,
+                      :twitter_secret => access_token.secret)
+            @user.save!          
+            flash[:success] = "User account created through Twitter"
+          else
+            @user.name = newname
+            @user.twittername = newtwittername
+            @user.save!
+          end
+            
+          sign_in @user
+          session['oauth_request_token_token'] = nil
+          session['oauth_request_token_secret'] = nil
+
+          redirect_to current_user          
+        else
+          
+          twid = client_info['id_str']
+          
+          olduser = User.find_by_twitter_id(twid)
+          if !olduser.nil?
+            flash[:error] = 'Twitter account already linked to another account'
+          else
+            current_user.twitter_token = access_token.token
+            current_user.twitter_secret = access_token.secret
+            current_user.twitter_id = twid
+            begin
+              raise 'Could not save user' if !current_user.save
+            rescue
+              flash[:error] = "bad"
+            end
+            flash[:notice] = 'Your account has been authorized at Twitter'
+            sign_in current_user
+          end
+          
+          session['oauth_request_token_token'] = nil
+          session['oauth_request_token_secret'] = nil
+          return redirect_to edit_user_path(current_user)
+          #rescue => e
+              #flash[:error] = 'There was an error during processing the response from Twitter.'
+              #flash[:error] = e.message
+        end
+      end    
+    end
   end
 
   # start a request and send to twitter
