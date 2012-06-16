@@ -23,17 +23,46 @@ class FacebooksController < ApplicationController
       access_token = @client.access_token! :client_auth_body
       fbuser = FbGraph::User.me(access_token).fetch
       
-      current_user.facebook_token = access_token.access_token
-        
-      raise 'Could not save user' if !current_user.save
+      if current_user.nil?
+        begin
+          newname = fbuser.name
+          newemail = fbuser.email
+          newuserid = fbuser.identifier
+          fbtoken = access_token.access_token
+          
+          @user = User.find_by_email(newemail)
+          if @user.nil?
+            @user = User.find_by_facebook_id(newuserid)
+            if @user.nil?
+              @user = User.new(:name => newname, :email => newemail,
+                      :facebook_id => newuserid, :facebook_token => fbtoken)
+              @user.save!
+              flash[:success] = "User account created through Facebook"
+            else
+              @user.name = newname
+              @user.email = newemail
+              @user.save!
+            end
+          end
+          sign_in @user
+          
+          redirect_to current_user
+        end
       
-      flash[:notice] = 'Your account has been authorized at Facebook: ' + fbuser.name
-    rescue
-      flash[:error] = 'There was an error during processing the response from Facebook.'
+      else
+        begin
+          current_user.facebook_token = access_token.access_token
+        
+          raise 'Could not save user' if !current_user.save
+      
+          flash[:notice] = 'Your account has been authorized at Facebook: ' + fbuser.name
+        rescue
+          flash[:error] = 'There was an error during processing the response from Facebook.'
+        end
+        
+        redirect_back_or edit_user_path(current_user)
+      end
     end
-
-    redirect_back_or edit_user_path(current_user)
-    
   end
 
   # start a request and send to twitter

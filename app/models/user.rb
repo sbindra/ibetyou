@@ -13,7 +13,8 @@
 
 class User < ActiveRecord::Base
   attr_accessible :email, :facebookname, :name, :twittername,
-                  :facebook_token, :twitter_token, :twitter_secret,
+                  :facebook_token, :facebook_id,
+                  :twitter_token, :twitter_secret,
                   :password, :password_confirmation
                   
   #has_secure_password
@@ -22,19 +23,21 @@ class User < ActiveRecord::Base
   
   validates_confirmation_of :password, :if=>:password_changed?
   validates :password, length: { minimum: 6 }, :if=>:password_changed?
-  validates_presence_of :password, :on => :create
+  validates_presence_of :password, :on => :create, :if=>:password_changed?
   
   
   has_many :bets, dependent: :destroy
   has_many :picks, dependent: :destroy
   
   before_save { |user| user.email = email.downcase }
-  before_save :create_remember_token, :if=>:password_changed?
+  before_save :create_remember_token
+  #, :if=>:password_changed?
   
   validates :name, presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX },
             uniqueness: { case_sensitive: false }
+  validates :facebook_id, :uniqueness => true
   #validates :password, length: { minimum: 6 }, :if=>:password_changed?
   #validates_confirmation_of :password, :if=>:password_changed?
   #validates :password_confirmation, presence: true
@@ -55,7 +58,8 @@ class User < ActiveRecord::Base
   end
   
   def password_changed?
-    !@password.blank?
+    #!@password.blank?
+    self.password || self.password_confirmation
   end
   
   def myownbets

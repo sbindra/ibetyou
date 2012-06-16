@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120616021933) do
+ActiveRecord::Schema.define(:version => 20120616044418) do
 
   create_table "bets", :force => true do |t|
     t.string   "thebet"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(:version => 20120616021933) do
     t.string   "twitter_secret"
     t.string   "facebook_token"
     t.string   "password_salt"
+    t.string   "facebook_id"
   end
 
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
