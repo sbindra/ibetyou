@@ -13,8 +13,18 @@
 
 class User < ActiveRecord::Base
   attr_accessible :email, :facebookname, :name, :twittername,
-                  :password, :password_confirmation, :facebook_token, :twitter_token, :twitter_secret
-  has_secure_password
+                  :facebook_token, :twitter_token, :twitter_secret,
+                  :password, :password_confirmation
+                  
+  #has_secure_password
+  attr_accessor :password
+  before_save :encrypt_password
+  
+  validates_confirmation_of :password, :if=>:password_changed?
+  validates :password, length: { minimum: 6 }, :if=>:password_changed?
+  validates_presence_of :password, :on => :create
+  
+  
   has_many :bets, dependent: :destroy
   has_many :picks, dependent: :destroy
   
@@ -25,9 +35,24 @@ class User < ActiveRecord::Base
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX },
             uniqueness: { case_sensitive: false }
-  validates :password, length: { minimum: 6 }, :if=>:password_changed?
-  validates_confirmation_of :password, :if=>:password_changed?
+  #validates :password, length: { minimum: 6 }, :if=>:password_changed?
+  #validates_confirmation_of :password, :if=>:password_changed?
   #validates :password_confirmation, presence: true
+  
+  def encrypt_password
+    if password.present?
+      self.password_salt = BCrypt::Engine.generate_salt
+      self.password_digest = BCrypt::Engine.hash_secret(password, password_salt)
+    end
+  end
+
+  def authenticate(password)
+    if self.password_digest == BCrypt::Engine.hash_secret(password, self.password_salt)
+      self
+    else
+      nil
+    end
+  end
   
   def password_changed?
     !@password.blank?

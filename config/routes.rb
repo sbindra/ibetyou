@@ -11,6 +11,7 @@ Ibetyou::Application.routes.draw do
   
   match '/users',   to: 'users#show'
   match '/signup',  to: 'users#new'
+  #get "sign_up" => "users#new", :as => "sign_up"
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy', via: :delete 
 
