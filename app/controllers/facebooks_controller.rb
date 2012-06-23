@@ -98,7 +98,7 @@ class FacebooksController < ApplicationController
   private
 
     def link_client
-      callback_facebook_url = 'http://localhost:3000/facebook/new'
+      callback_facebook_url = FACEBOOK_CALLBACK_URL
       newfbauth = FbGraph::Auth.new FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, :redirect_uri => callback_facebook_url
       @client = newfbauth.client
     end
