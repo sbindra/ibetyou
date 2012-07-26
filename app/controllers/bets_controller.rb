@@ -22,6 +22,13 @@ class BetsController < ApplicationController
   
   def edit
     @bet = Bet.find(params[:id])
+    @bet_url = request.protocol + request.host_with_port + edit_bet_path(@bet)
+    #@bet_url = 'https://gentle-snow-7462.herokuapp.com/' + edit_bet_path(@bet)
+    if @bet.thebet.length >= 119
+      @bet_twitter_post = @bet.thebet[0..115]+'... '+@bet_url
+    else
+      @bet_twitter_post = @bet.thebet+' '+@bet_url
+    end
   end
   
   def update

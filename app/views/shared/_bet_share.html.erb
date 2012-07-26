@@ -4,18 +4,21 @@
 	<% if (current_user == @bet.user && @bet.betshared?) ||
 		  (current_user != @bet.user && !@bet.userpick(current_user).nil? && 
 				@bet.userpick(current_user).betshared?) %>
-		Find out what more friends think?
+		<b>Find out what more friends think?</b>
 	<% else %>
-		Find out what your friends think?
+		<b>Find out what your friends think?</b>
 	<% end %>
 	<br>
 	<%= form_for(@bet, :url => picks_path, :html => {:method => :post}) do |f| %>			
 		<%= hidden_field_tag 'bet_id', @bet.id %>
 		<% if current_user.twitter? %>
+			<%= text_area_tag(:tweet, @bet_twitter_post, :size => "30x2", :class => "tweet") %><br>
+			<span class="countdown"></span><br>
 			<%= f.submit "Share on Twitter", class: "btn btn-large btn-primary" %>
 		<% else %>
 			<%= link_to 'Authorize Twitter', twitter_path, :method => :post %>
 		<% end %>
+		
 		<% if current_user.facebook? %>
 			<%= f.submit "Share on Facebook", class: "btn btn-large btn-primary" %>
 		<% else %>
@@ -24,10 +27,20 @@
 	<% end %>
 	Copy this link: <%= request.url %>
 	<br>
-	<% if current_user.twitter? %>
-	  <%= link_to 'Post Bet to Twitter', twitter_path, :method => :createpost %>
-	<% else %>
-	  <%= link_to 'Authorize Twitter', twitter_path, :method => :post %>
-	<% end %>
 <% end %>
 <br>
+
+
+<script>
+function updateCountdown() {
+	var urlregex = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+	var remaining = 140 - jQuery('.tweet').val().replace(urlregex, '123456789012345678901').length;
+	jQuery('.countdown').text(remaining + ' characters remaining.');
+}
+
+jQuery(document).ready(function($) {
+	updateCountdown();
+	$('.tweet').change(updateCountdown);
+	$('.tweet').keyup(updateCountdown);
+});
+</script>

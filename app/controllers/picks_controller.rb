@@ -21,16 +21,9 @@ class PicksController < ApplicationController
           flash[:error] = "Reauthorize Facebook"
       end
     elsif params[:commit] == "Share on Twitter"
+      @tweet = params[:tweet]
       
-      @bet_url = request.protocol + request.host_with_port + edit_bet_path(@bet)
-      #@bet_url = 'https://gentle-snow-7462.herokuapp.com/' + edit_bet_path(@bet)
-      if @bet.thebet.length >= 119
-        @bet_twitter_post = @bet.thebet[0..115]+'... '
-      else
-        @bet_twitter_post = @bet.thebet+' '
-      end
-      
-      current_user.twitter.update(@bet_twitter_post+@bet_url, {:include_entities => true}) if current_user.twitter?
+      current_user.twitter.update(@tweet, {:include_entities => true}) if current_user.twitter?
       
       if current_user == @bet.user
         if !@bet.betshared?

@@ -3,6 +3,7 @@ Ibetyou::Application.routes.draw do
   resources :sessions, only: [:new, :create, :destroy]
   resources :bets
   resources :picks, only: [:create]
+  resources :messages
   
   resource :twitter
   resource :facebook
