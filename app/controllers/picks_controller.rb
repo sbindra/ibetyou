@@ -5,12 +5,13 @@ class PicksController < ApplicationController
     @bet = Bet.find(params[:bet_id])
     
     if params[:commit] == "Share on Facebook"
+      @tweet = params[:tweet]
       @bet_url = request.protocol + request.host_with_port + edit_bet_path(@bet)
       #@bet_url = 'https://gentle-snow-7462.herokuapp.com/' + edit_bet_path(@bet)
       
       begin
         current_user.facebook.feed!(
-          :message => @bet.thebet,
+          :message => @tweet,
           :link => @bet_url,
           :name => 'iBetYou',
           :description => 'What do you think?'
